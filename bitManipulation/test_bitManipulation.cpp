@@ -9,6 +9,13 @@
 using namespace cxxRecipes;
 
 
+BOOST_AUTO_TEST_CASE(numOfBits_test)
+{
+	int nBits = numOfBits(8);
+	BOOST_CHECK(nBits == 1);
+	int nBits1 = numOfBits(0xffffffff);
+	BOOST_CHECK(nBits1 == 32);
+}
 
 BOOST_AUTO_TEST_CASE(printInBit_test)
 {
