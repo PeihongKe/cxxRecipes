@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(bit_xor_test)
 	int input1 = 1234;			
 	BOOST_CHECK((input1^0) == input1);
 
-	// test2: Flip 
+	// test2:  myBits ^ 1: Flip 
 	int max = 0xffffffff;
 	int mask = 0xffffffff;
 	int min = 0;
@@ -108,4 +108,28 @@ BOOST_AUTO_TEST_CASE(bit_left_shift_test)
 	int n = 3;
 	BOOST_CHECK((v<<n) == static_cast<int>(v* pow(2,n)));	
 }
+
+
+BOOST_AUTO_TEST_CASE(IsEven_test)
+{
+	BOOST_CHECK(isEven(100));
+	BOOST_CHECK(!isEven(99));
+	BOOST_CHECK(isEven(98));
+	BOOST_CHECK(isEven(2));
+	BOOST_CHECK(!isEven(1));
+	BOOST_CHECK(isEven(0));
+}
+
+BOOST_AUTO_TEST_CASE(trickOfIMinusOne_test)
+{
+	vector<int> res;
+	res.push_back(0);
+	for (int i = 1; i <= 64; ++i)
+	{
+		res.push_back(i&(i - 1));
+	}
+	int aaa = 1;
+
+}
+
 
