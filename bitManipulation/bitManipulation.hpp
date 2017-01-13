@@ -9,10 +9,13 @@ namespace cxxRecipes
 {
 	int leftShift(int v, int n);
 	string printInBit(int n);
-	int numOfBits(int n);
+	int numOfBitsOne(int n);
+	int numOfBitsOccupied(int n);
 	int isPowerOfTwo(int n);
 	bool isEven(int n);
 
+
+	int NOnesOnRight(int n);
 
 	
 }

@@ -9,13 +9,45 @@
 using namespace cxxRecipes;
 
 
-BOOST_AUTO_TEST_CASE(numOfBits_test)
+BOOST_AUTO_TEST_CASE(numOfBitsOne_test)
 {
-	int nBits = numOfBits(8);
+	int nBits = numOfBitsOne(8);
 	BOOST_CHECK(nBits == 1);
-	int nBits1 = numOfBits(0xffffffff);
+	int nBits1 = numOfBitsOne(0xffffffff);
 	BOOST_CHECK(nBits1 == 32);
+	int nBits2 = numOfBitsOne(5);
+	BOOST_CHECK(nBits2 ==  2);
 }
+
+BOOST_AUTO_TEST_CASE(numOfBitsOccupied_test)
+{
+	int nBits = numOfBitsOccupied(8);
+	BOOST_CHECK(nBits == 4);
+	int nBits1 = numOfBitsOccupied(0xffffffff);
+	BOOST_CHECK(nBits1 == 32);
+	int nBits2 = numOfBitsOccupied(5);
+	BOOST_CHECK(nBits2 == 3);
+}
+
+
+BOOST_AUTO_TEST_CASE(NOnesOnRight_test)
+{
+	int nOnesOnRight1 = NOnesOnRight(1);
+	BOOST_CHECK(nOnesOnRight1 == 1);
+
+	int nOnesOnRight2 = NOnesOnRight(2);
+	BOOST_CHECK(nOnesOnRight2 == 3);
+
+	int nOnesOnRight3 = NOnesOnRight(3);
+	BOOST_CHECK(nOnesOnRight3 == 7);
+
+	int nOnesOnRight4 = NOnesOnRight(4);
+	BOOST_CHECK(nOnesOnRight4 == 15);
+}
+
+
+
+
 
 BOOST_AUTO_TEST_CASE(printInBit_test)
 {

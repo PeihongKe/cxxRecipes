@@ -36,7 +36,7 @@ namespace cxxRecipes
 		return ss.str();		
 	}
 
-	int numOfBits(int n)
+	int numOfBitsOne(int n)
 	{
 		if (n == 0)
 			return 0;
@@ -51,6 +51,18 @@ namespace cxxRecipes
 		return count;
 	}
 
+	int numOfBitsOccupied(int n) 
+	{
+		int j = ~0;
+		int count = 0;
+		while ((j ) & n)
+		{
+			j <<= 1;
+			++count;
+		}
+		return count;
+	}
+
 	int isPowerOfTwo(int n)
 	{
 		return n>0 && !(n&(n - 1));
@@ -59,5 +71,17 @@ namespace cxxRecipes
 	bool isEven(int n)
 	{
 		return !(n & 1);
+	}
+
+	int NOnesOnRight(int n)
+	{
+		int i = ~0;
+		while (n)
+		{
+			i <<= 1;
+			--n;
+		}
+
+		return ~i;
 	}
 }
