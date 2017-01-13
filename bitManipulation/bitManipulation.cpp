@@ -84,4 +84,16 @@ namespace cxxRecipes
 
 		return ~i;
 	}
+
+	int NOnesOnRight2(int n)
+	{
+		int i = 0;
+		while (n)
+		{
+			--n;
+			//i = i << 1 + 1; // NOTE: this is wrong as << has higher precedence than +
+			i = (i << 1) + 1;
+		}
+		return i;
+	}
 }

@@ -16,6 +16,7 @@ namespace cxxRecipes
 
 
 	int NOnesOnRight(int n);
+	int NOnesOnRight2(int n);
 
 	
 }

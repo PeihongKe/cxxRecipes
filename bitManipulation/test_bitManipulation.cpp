@@ -32,6 +32,10 @@ BOOST_AUTO_TEST_CASE(numOfBitsOccupied_test)
 
 BOOST_AUTO_TEST_CASE(NOnesOnRight_test)
 {
+
+	int nOnesOnRight0 = NOnesOnRight(0);
+	BOOST_CHECK(nOnesOnRight0 == 0);
+
 	int nOnesOnRight1 = NOnesOnRight(1);
 	BOOST_CHECK(nOnesOnRight1 == 1);
 
@@ -42,6 +46,22 @@ BOOST_AUTO_TEST_CASE(NOnesOnRight_test)
 	BOOST_CHECK(nOnesOnRight3 == 7);
 
 	int nOnesOnRight4 = NOnesOnRight(4);
+	BOOST_CHECK(nOnesOnRight4 == 15);
+}
+
+
+BOOST_AUTO_TEST_CASE(NOnesOnRight2_test)
+{
+	int nOnesOnRight1 = NOnesOnRight2(1);
+	BOOST_CHECK(nOnesOnRight1 == 1);
+
+	int nOnesOnRight2 = NOnesOnRight2(2);
+	BOOST_CHECK(nOnesOnRight2 == 3);
+
+	int nOnesOnRight3 = NOnesOnRight2(3);
+	BOOST_CHECK(nOnesOnRight3 == 7);
+
+	int nOnesOnRight4 = NOnesOnRight2(4);
 	BOOST_CHECK(nOnesOnRight4 == 15);
 }
 
