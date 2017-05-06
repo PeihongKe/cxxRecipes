@@ -9,6 +9,12 @@ namespace cxxRecipes
 {	
 	namespace smartPointers 
 	{
+		template<typename T>
+		class Weak_Pointer
+		{
+
+		};
+
 		/*
 		a naive implementation of shared pointer;
 		do not consider move;		
