@@ -27,9 +27,15 @@ namespace cxxRecipes
 				return data;
 			}
 
+			void setNextInt(const Shared_Pointer<IntStruct>& a)
+			{
+				next = a;
+			}
+
 
 		private:
 			int data;
+			Shared_Pointer<IntStruct> next;
 		};
 
 
@@ -90,6 +96,31 @@ namespace cxxRecipes
 				delete pp;
 				BOOST_CHECK(p1.getCount() == 1);								
 			}			
+			
+		}
+
+		BOOST_AUTO_TEST_CASE(SP_cyclic_reference)
+		{
+			Shared_Pointer<IntStruct> q1;
+			Shared_Pointer<IntStruct> q2;
+			{
+				Shared_Pointer<IntStruct> p1(new IntStruct(5));
+				Shared_Pointer<IntStruct> p2(new IntStruct(5));
+				BOOST_CHECK(p1.getCount() == 1);
+				BOOST_CHECK(p2.getCount() == 1);
+
+				q1 = p1;
+				q2 = p2;
+
+				p1->setNextInt(p2);
+				p2->setNextInt(p1);
+
+				BOOST_CHECK(p1.getCount() == 3);
+				BOOST_CHECK(p2.getCount() == 3);
+			}		
+
+			BOOST_CHECK(q1.getCount() == 2);
+			BOOST_CHECK(q2.getCount() == 2); // one count from q2, one from cyclic count
 			
 		}
 	}

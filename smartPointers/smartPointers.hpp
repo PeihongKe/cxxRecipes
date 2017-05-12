@@ -23,6 +23,12 @@ namespace cxxRecipes
 		class Shared_Pointer
 		{
 		public:
+
+			Shared_Pointer()
+			{ 
+				count = new int(0);
+			}
+
 			Shared_Pointer(T* rhs)
 			{
 				initialize(rhs);
@@ -76,6 +82,12 @@ namespace cxxRecipes
 
 			void decrease() 
 			{ 
+				// well, 
+				if (*count == 0)
+				{
+					delete count; // for empty shared_pointer
+				}
+
 				*count -= 1; 
 				if (*count == 0)
 				{
