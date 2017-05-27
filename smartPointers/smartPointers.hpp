@@ -29,6 +29,12 @@ namespace cxxRecipes
 				count = new int(0);
 			}
 
+			template<typename U>
+			Shared_Pointer(U* rhs)
+			{
+				initialize(rhs);
+			}
+
 			Shared_Pointer(T* rhs)
 			{
 				initialize(rhs);

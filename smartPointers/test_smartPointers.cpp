@@ -38,6 +38,13 @@ namespace cxxRecipes
 			Shared_Pointer<IntStruct> next;
 		};
 
+		struct SmallInStruct : public IntStruct
+		{
+			SmallInStruct(int rhs): IntStruct(rhs)
+			{				
+			}
+		};
+
 
 		BOOST_AUTO_TEST_CASE(SP_operators_test)
 		{
@@ -52,7 +59,7 @@ namespace cxxRecipes
 		{
 			Shared_Pointer<int> p(new int(5));
 			BOOST_CHECK(*p == 5);
-			BOOST_CHECK(p.getCount() == 1);			
+			BOOST_CHECK(p.getCount() == 1);
 
 			Shared_Pointer<int> p1(p);
 			BOOST_CHECK(*p1 == 5);
@@ -94,9 +101,16 @@ namespace cxxRecipes
 				BOOST_CHECK(pp->getCount() == 2);
 
 				delete pp;
-				BOOST_CHECK(p1.getCount() == 1);								
-			}			
-			
+				BOOST_CHECK(p1.getCount() == 1);
+			}
+
+		}
+
+		BOOST_AUTO_TEST_CASE(SP_WithClassHier)
+		{
+			Shared_Pointer<IntStruct> q1(new SmallInStruct(7));
+			BOOST_CHECK(q1.getCount() == 1);
+			BOOST_CHECK(q1->getData(), 7);
 		}
 
 		BOOST_AUTO_TEST_CASE(SP_cyclic_reference)
