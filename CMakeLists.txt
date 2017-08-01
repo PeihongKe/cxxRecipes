@@ -22,3 +22,4 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 add_subdirectory(bitManipulation)
 add_subdirectory(smartPointers)
+add_subdirectory(alignment)
