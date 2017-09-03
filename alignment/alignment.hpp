@@ -1,9 +1,7 @@
-#ifndef SMART_POINTERS
-#define SMART_POINTERS
+#ifndef ALIGNMENT
+#define ALIGNMENT
 
-#include <sstream> 
-#include <iostream> 
-#include <limits>
+#include <memory>
 
 namespace cxxRecipes
 {	
