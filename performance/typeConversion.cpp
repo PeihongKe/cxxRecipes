@@ -12,7 +12,7 @@
 		}
 		else
 		{
-			buf[--i] == '0';
+			buf[--i] = '0';
 		}
 		return &buf[i];
 	}

@@ -110,7 +110,7 @@ namespace cxxRecipes
 		{
 			Shared_Pointer<IntStruct> q1(new SmallInStruct(7));
 			BOOST_CHECK(q1.getCount() == 1);
-			BOOST_CHECK(q1->getData(), 7);
+			BOOST_CHECK(q1->getData() == 7);
 		}
 
 		BOOST_AUTO_TEST_CASE(SP_cyclic_reference)
