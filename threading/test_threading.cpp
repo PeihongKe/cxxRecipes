@@ -2,6 +2,8 @@
 #define BOOST_TEST_MODULE test_threading
 #include <boost/test/unit_test.hpp>
 #include "threading\threading.hpp"
+#include <mutex>
+
 
 // https://www.bogotobogo.com/cplusplus/C11/1_C11_creating_thread.php
 
@@ -105,4 +107,110 @@ BOOST_AUTO_TEST_CASE(thread_from_lambda)
 	std::cout << "main thread thread_from_lambda" << std::endl;
 	t.join();
 	
+}
+
+
+std::mutex qMutex;
+std::condition_variable cv;
+int Max_Queue_Length = 5;
+std::queue<int> queue;
+
+class Producer
+{
+public:
+	Producer(std::queue<int> & q) : m_prodCount(0), m_queue(q) 
+	{
+	}
+
+	void run()
+	{
+		
+		while (true)
+		{
+			std::unique_lock<std::mutex> lc(qMutex);
+			cv.wait(lc, [&] {
+				auto isNotFull = (Max_Queue_Length != m_queue.size());
+				if (!isNotFull)
+				{
+					std::cout << "producer is waiting " << std::endl;
+				}
+				return isNotFull; });
+
+
+			auto newProdue = ++m_prodCount;
+			std::cout << "Producing " << newProdue << std::endl;
+			
+			m_queue.push(newProdue);
+			lc.unlock();
+			cv.notify_all();
+			std::this_thread::sleep_for(std::chrono::seconds(2));
+
+		}
+	}
+
+private:
+	int m_prodCount = 0;	
+	std::queue<int>& m_queue;
+ 
+};
+
+class Consumer
+{
+public:
+	Consumer(std::queue<int>& q): m_queue(q)
+	{}
+
+	void comsume()
+	{
+		
+		while (true)
+		{
+			std::unique_lock<std::mutex> lc(qMutex);
+			cv.wait(lc, [&] {
+				auto isEmptyFull = ( 0 != m_queue.size());
+				if (!isEmptyFull)
+				{
+					std::cout << "consumer is waiting " << std::endl;
+				}
+				return isEmptyFull; }
+			);
+			auto consumedProduct = m_queue.front();
+			m_queue.pop();
+			std::cout << "Comsuming	 " << consumedProduct << std::endl;
+			
+
+			lc.unlock();
+			cv.notify_all();
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			
+
+		}
+	}
+
+private:
+	std::queue<int>& m_queue;
+};
+
+BOOST_AUTO_TEST_CASE(comsumer_producer)
+{
+	Producer p(queue);
+	Consumer c(queue);
+	std::cout << "Producer starts" << std::endl;
+	std::thread t1(&Producer::run, p);
+	
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+
+	std::cout << "Consumer starts" << std::endl;
+	std::thread t2(&Consumer::comsume, c);
+	
+
+	t1.join();
+	t2.join();
+
+	std::cout << "finished" << std::endl;
+
+	//std::vector<int> productsToProduce{ 1,2,3,4,5,6,7,8,9 };
+	//std::vector<int> pruductInterval{ 1,1,1,1,1,1,1,1,0 };
+
+
 }

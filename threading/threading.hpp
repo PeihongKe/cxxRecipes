@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <string.h>
+#include <queue>
 
 void thread_function()
 {
@@ -27,4 +28,12 @@ struct functor
 		std::cout << "functor" << std::endl;
 	}
 };
+
+
+
+
+
+
+
+
 
