@@ -113,6 +113,7 @@ BOOST_AUTO_TEST_CASE(thread_from_lambda)
 std::mutex qMutex;
 std::condition_variable cv;
 int Max_Queue_Length = 5;
+int Max_Total = 10;
 std::queue<int> queue;
 
 class Producer
@@ -125,9 +126,16 @@ public:
 	void run()
 	{
 		
-		while (true)
+		while (true )
 		{
 			std::unique_lock<std::mutex> lc(qMutex);
+			if (m_prodCount > Max_Total)
+			{
+				std::cout << "producer stops producing " << std::endl;
+				lc.unlock();
+				cv.notify_all();
+				break;
+			}
 			cv.wait(lc, [&] {
 				auto isNotFull = (Max_Queue_Length != m_queue.size());
 				if (!isNotFull)
@@ -143,7 +151,7 @@ public:
 			m_queue.push(newProdue);
 			lc.unlock();
 			cv.notify_all();
-			std::this_thread::sleep_for(std::chrono::seconds(2));
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 
 		}
 	}
@@ -166,6 +174,14 @@ public:
 		while (true)
 		{
 			std::unique_lock<std::mutex> lc(qMutex);
+			auto consumedProduct = m_queue.front();
+			if (consumedProduct == Max_Total)
+			{
+				std::cout << "consumer stops consuming " << std::endl;
+				lc.unlock();
+				cv.notify_all();
+				break;
+			}
 			cv.wait(lc, [&] {
 				auto isEmptyFull = ( 0 != m_queue.size());
 				if (!isEmptyFull)
@@ -174,7 +190,7 @@ public:
 				}
 				return isEmptyFull; }
 			);
-			auto consumedProduct = m_queue.front();
+
 			m_queue.pop();
 			std::cout << "Comsuming	 " << consumedProduct << std::endl;
 			
@@ -209,8 +225,45 @@ BOOST_AUTO_TEST_CASE(comsumer_producer)
 
 	std::cout << "finished" << std::endl;
 
-	//std::vector<int> productsToProduce{ 1,2,3,4,5,6,7,8,9 };
-	//std::vector<int> pruductInterval{ 1,1,1,1,1,1,1,1,0 };
+}
 
 
+void FunctionToBeBlocked()
+{
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::cout << "FunctionToBeBlocked starts" << std::endl;
+	std::lock_guard<std::mutex> lc(qMutex);
+	int i = 0;
+	while (++i <=3)
+	{
+		std::cout << "FunctionToBeBlocked is running for " << i << " seconds" << std::endl;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
+	std::cout << "FunctionToBeBlocked finished" << std::endl;
+}
+
+void FunctionBlocking()
+{
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::cout << "Blocking function starts but is blocked" << std::endl;	
+	std::lock_guard<std::mutex> lc(qMutex);
+	std::cout << "Blocking function - block for 5 seconds" << std::endl;
+	int i = 0;
+	while (++i <= 5)
+	{
+		std::cout << "blocking function is running for " << i << " seconds " << std::endl;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+	}
+	std::cout << "Blocking function finished" << std::endl;
+	
+}
+
+
+BOOST_AUTO_TEST_CASE(MutexTest)
+{
+	std::thread t1(FunctionToBeBlocked);
+	std::thread t2(FunctionBlocking);
+
+	t1.join();
+	t2.join();
 }
