@@ -181,7 +181,7 @@ public:
 				lc.unlock();
 				cv.notify_all();
 				break;
-			}
+			} 
 			cv.wait(lc, [&] {
 				auto isEmptyFull = ( 0 != m_queue.size());
 				if (!isEmptyFull)
